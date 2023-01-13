@@ -13,6 +13,6 @@ public interface DomaineSvc {
     String Supprimer(Long iddomaine);
 
     //user
-
+Domaine AjouterDomainePourUser(Domaine domaine);
 
 }

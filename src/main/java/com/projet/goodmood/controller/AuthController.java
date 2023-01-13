@@ -143,13 +143,14 @@ public class AuthController {
         //on recupere le role de l'user dans un tableau ordonné de type string
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
-
+        System.err.println(strRoles);
         if (strRoles == null) {
             System.out.println("####################################" + signUpRequest.getRole() + "###########################################");
 
             //on recupere le role de l'utilisateur
             Role userRole = roleRepo.findByName(ERole.ROLE_USER);
-            roles.add(userRole);//on ajoute le role de l'user à roles
+            //roles.add(userRole);//on ajoute le role de l'user à roles
+
         } else {
             strRoles.forEach(role -> {//on parcours le role
                 switch (role) {

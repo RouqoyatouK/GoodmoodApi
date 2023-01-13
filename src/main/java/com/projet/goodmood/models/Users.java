@@ -32,8 +32,8 @@ public class Users {
     private Set<Role> roles = new HashSet<>();
 
 
-   /* @ManyToMany(mappedBy="users")
-    private Set<Domaine> domaines=new HashSet<>();*/
+    @ManyToMany(mappedBy="userss")
+    private Set<Domaine> domaines=new HashSet<>();
 
 
     public Users(String username, String email, String encode) {

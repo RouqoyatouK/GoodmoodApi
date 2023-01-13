@@ -28,26 +28,15 @@ public class Domaine {
 
         @ManyToOne( optional = false)
         @JoinColumn(name = "users", nullable = false)
-        @OnDelete(action = OnDeleteAction.CASCADE)
         private Users users;
 
 
-     /*   @ManyToMany()
+        @ManyToMany()
         @JoinTable(  name = "domaine_user",
                 joinColumns = @JoinColumn(name = "domaine_id"),
-                inverseJoinColumns = @JoinColumn(name = " user_id"))
-        private Set<Users> users=new HashSet<>();
+                inverseJoinColumns = @JoinColumn(name = "user_id"))
+        private Set<Users> userss =new HashSet<>();
 
 
-        public Domaine(Set<Users> users) {
-                this.users = users;
-        }
 
-        public Set<Users> getUsers() {
-                return users;
-        }
-
-        public void setUsers(Set<Users> users) {
-                this.users = users;
-        }*/
 }

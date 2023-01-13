@@ -13,8 +13,7 @@ import com.projet.goodmood.service.TacheSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tache")
@@ -45,11 +44,33 @@ public class TacheCtrl {
         return tacheSvc.Ajouter(tache);
     }
 
-    @PutMapping("/complet/{idtache}")
-    public void TacheComplet(@PathVariable Long idtache){
-        Tache tache= tacheRepo.findById(idtache).get();
-        tache.setCompleted(!tache.getCompleted());
-        tacheRepo.save(tache);
-        System.out.println("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjj:  "+  tache.getCompleted());
+    @DeleteMapping("/delete/{idusers}/{idtache}")
+    public String Supprimer(@PathVariable Long idtache, @PathVariable Long idusers){
+        Users users= usersRepo.findById(idusers).get();
+        Tache tache=tacheRepo.findById(idtache).get();
+        if (tache.getUsers().equals(users)){
+        tacheSvc.Spprimer(idtache);
+        return "succes";
+        }else return "vous n'avez pas ce droit";
     }
+
+    @GetMapping("/read/{idusers}")
+    public List<Tache> Readd(@PathVariable Long idusers){
+        Users users= usersRepo.findById(idusers).get();
+        return tacheRepo.AfficherTacheDunUser(idusers);
+    }
+
+    @PutMapping("/update/{idusers}/{idtache}")
+    public String Modifier (@PathVariable Long idusers, @PathVariable Long idtache, @RequestBody Tache tache){
+        Users users= usersRepo.findById(idusers).get();
+        Tache tach =tacheRepo.findById(idtache).get();
+
+        if (tach.getUsers().equals(users)){
+            tacheSvc.Modifier(tache, idtache);
+            return"succes";
+        }else {
+            return "pas le droit";
+        }
+
+        }
 }

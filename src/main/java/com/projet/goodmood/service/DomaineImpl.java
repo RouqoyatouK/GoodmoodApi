@@ -37,5 +37,10 @@ public class DomaineImpl implements DomaineSvc{
          return "ok";
     }
 
+    @Override
+    public Domaine AjouterDomainePourUser(Domaine domaine) {
+        return domaineRepo.save(domaine);
+    }
+
 
 }

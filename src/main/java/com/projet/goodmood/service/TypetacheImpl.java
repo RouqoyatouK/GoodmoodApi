@@ -16,15 +16,16 @@ public class TypetacheImpl implements TypetacheSvc{
         return typetacheRepo.save(typeTache);
     }
 
-    @Override
+   /* @Override
     public List<TypeTache> Aficher() {
         return typetacheRepo.findAll();
-    }
+    }*/
 
     @Override
     public TypeTache Modifier(TypeTache typeTache, Long idtypetache) {
         return typetacheRepo.findById(idtypetache).map(t->{
             t.setNomtypetache(typeTache.getNomtypetache());
+            t.setUsers(typeTache.getUsers());
             return typetacheRepo.save(t);
         }).orElseThrow(()->new RuntimeException("trouver!"));
     }

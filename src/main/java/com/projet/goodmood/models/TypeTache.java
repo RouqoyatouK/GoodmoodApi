@@ -5,39 +5,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class TypeTache {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idtypttache;
-    @Column(unique = true)
+    @Column(length = 50,  unique =true)
     private String Nomtypetache;
 
-    public TypeTache(Long idtypttache, String nomtypetache) {
-        this.idtypttache = idtypttache;
-        Nomtypetache = nomtypetache;
-    }
+    @ManyToOne( optional = false)
+    @JoinColumn(name = "idusers", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Users users;
 
-    public TypeTache() {
-    }
-
-    public Long getIdtypttache() {
-        return idtypttache;
-    }
-
-    public void setIdtypttache(Long idtypttache) {
-        this.idtypttache = idtypttache;
-    }
-
-    public String getNomtypetache() {
-        return Nomtypetache;
-    }
-
-    public void setNomtypetache(String nomtypetache) {
-        Nomtypetache = nomtypetache;
-    }
 }

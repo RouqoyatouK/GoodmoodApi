@@ -7,7 +7,7 @@ import java.util.List;
 public interface TypetacheSvc {
 
     TypeTache Creer(TypeTache typeTache);
-    List<TypeTache> Aficher();
+    //List<TypeTache> Aficher();
     TypeTache Modifier(TypeTache typeTache, Long idtypetache);
     String Supprimer(Long idtypetch);
 }
