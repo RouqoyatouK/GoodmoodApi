@@ -1,20 +1,14 @@
 package com.projet.goodmood.controller;
 
 
-import com.projet.goodmood.models.Priority;
-import com.projet.goodmood.models.Tache;
-import com.projet.goodmood.models.TypeTache;
-import com.projet.goodmood.models.Users;
-import com.projet.goodmood.repository.PriorityRepo;
-import com.projet.goodmood.repository.TacheRepo;
-import com.projet.goodmood.repository.TypetacheRepo;
-import com.projet.goodmood.repository.UsersRepo;
+import com.projet.goodmood.models.*;
+import com.projet.goodmood.repository.*;
 import com.projet.goodmood.service.TacheSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
 @RestController
 @RequestMapping("/tache")
 public class TacheCtrl {
@@ -22,7 +16,7 @@ public class TacheCtrl {
     @Autowired
     TacheSvc tacheSvc;
     @Autowired
-    UsersRepo usersRepo;
+    PlanningRepo planningRepo;
     @Autowired
     PriorityRepo priorityRepo;
     @Autowired
@@ -30,47 +24,50 @@ public class TacheCtrl {
     @Autowired
     TacheRepo tacheRepo;
 
-    @PostMapping("/add/{idusers}/{idtypetache}/{idpriority}")
-    public Tache Createe(@RequestBody Tache tache, @PathVariable Long idusers, @PathVariable Long idtypetache, @PathVariable Long idpriority ){
+    @PostMapping("/add/{idplanning}/{idtypetache}/{idpriority}")
+    public Tache Createe(@RequestBody Tache tache, @PathVariable Long idplanning, @PathVariable Long idtypetache, @PathVariable Long idpriority ){
 
         Priority priority= priorityRepo.findByIdpriority(idpriority);
         TypeTache typeTache=typetacheRepo.findByIdtypttache(idtypetache);
-        Users users= usersRepo.findById(idusers).get();
+        Planning planning= planningRepo.findById(idplanning).get();
 
         tache.setTypetache(typeTache);
         tache.setPriority(priority);
-        tache.setUsers(users);
+        tache.setPlanning(planning);
 
         return tacheSvc.Ajouter(tache);
     }
 
-    @DeleteMapping("/delete/{idusers}/{idtache}")
-    public String Supprimer(@PathVariable Long idtache, @PathVariable Long idusers){
-        Users users= usersRepo.findById(idusers).get();
+    @PutMapping("/complet/{idtache}")
+    public String Valider(@PathVariable Long idtache){
         Tache tache=tacheRepo.findById(idtache).get();
-        if (tache.getUsers().equals(users)){
+        //tache.setCompleted(!tache.getCompleted());
+        tache.setCompleted(Boolean.TRUE);
+        tacheRepo.save(tache);
+        return "ok";
+    }
+
+
+
+    @DeleteMapping("/delete/{idtache}")
+    public String Supprimer(@PathVariable Long idtache, @PathVariable Long idplanning){
+        Tache tache=tacheRepo.findById(idtache).get();
         tacheSvc.Spprimer(idtache);
         return "succes";
-        }else return "vous n'avez pas ce droit";
+
     }
 
-    @GetMapping("/read/{idusers}")
-    public List<Tache> Readd(@PathVariable Long idusers){
-        Users users= usersRepo.findById(idusers).get();
-        return tacheRepo.AfficherTacheDunUser(idusers);
+    @GetMapping("/read/{idplanning}")
+    public List<Tache> Readd(@PathVariable Long idplanning){
+        Planning planning= planningRepo.findById(idplanning).get();
+        return tacheRepo.AfficherTacheDunUser(idplanning);
     }
 
-    @PutMapping("/update/{idusers}/{idtache}")
-    public String Modifier (@PathVariable Long idusers, @PathVariable Long idtache, @RequestBody Tache tache){
-        Users users= usersRepo.findById(idusers).get();
+    @PutMapping("/update/{idtache}")
+    public String Modifier ( @PathVariable Long idtache, @RequestBody Tache tache){
         Tache tach =tacheRepo.findById(idtache).get();
-
-        if (tach.getUsers().equals(users)){
-            tacheSvc.Modifier(tache, idtache);
-            return"succes";
-        }else {
-            return "pas le droit";
-        }
+        tacheSvc.Modifier(tache, idtache);
+        return"ok!";
 
         }
 }

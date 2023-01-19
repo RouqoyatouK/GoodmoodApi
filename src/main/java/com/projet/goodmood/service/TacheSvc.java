@@ -11,5 +11,8 @@ public interface TacheSvc {
     Tache Ajouter (Tache tache);
     List<Tache> Afficher();
     Tache Modifier(Tache tache, Long idtache);
+
+    Tache Modifiercomplet(Tache tache, Long idtache);
+
     String Spprimer (Long idtache);
 }

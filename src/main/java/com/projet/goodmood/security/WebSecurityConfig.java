@@ -126,6 +126,11 @@ public class WebSecurityConfig {
                 .antMatchers("/favoris/**").permitAll()
                 .antMatchers("/typetache/**").permitAll()
                 .antMatchers("/tache/**").permitAll()
+                .antMatchers("/planning/**").permitAll()
+                .antMatchers("/priority/**").permitAll()
+
+
+
 
 
 

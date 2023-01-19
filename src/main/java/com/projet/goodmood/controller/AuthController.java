@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8101", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/api/auth")
 public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
@@ -150,6 +150,7 @@ public class AuthController {
             //on recupere le role de l'utilisateur
             Role userRole = roleRepo.findByName(ERole.ROLE_USER);
             //roles.add(userRole);//on ajoute le role de l'user à roles
+            roles.add(userRole);
 
         } else {
             strRoles.forEach(role -> {//on parcours le role

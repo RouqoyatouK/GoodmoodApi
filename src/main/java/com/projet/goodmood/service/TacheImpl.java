@@ -29,8 +29,17 @@ public class TacheImpl implements TacheSvc{
             t.setDate(tache.getDate());
             t.setPriority(tache.getPriority());
             t.setTypetache(tache.getTypetache());
+            t.setPlanning(tache.getPlanning());
             return tacheRepo.save(t);
         }).orElseThrow(()->new RuntimeException("trouver"));
+    }
+
+    @Override
+    public Tache Modifiercomplet(Tache tache, Long idtache) {
+        return tacheRepo.findById(idtache).map(tc -> {
+            tc.setCompleted(tache.getCompleted());
+            return tacheRepo.save(tc);
+        }).orElseThrow(() -> new RuntimeException("trouver"));
     }
 
     @Override
