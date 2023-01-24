@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/domaine")
 public class DomaineCtrl {
     @Autowired
@@ -51,8 +52,7 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
                dmn.setImagedomaine(SaveImage.save("domaines", file, dmn.getNomdomaine()));
                    dmn.setUsers(usr);
 
-
-
+                   dmn.setDate(new Date());
                domaineSvc.Creer(dmn);
                 System.out.println("hhhhhhhhhhhhhhh"+dmn.getImagedomaine());
                 return ResponseMessage.generateResponse("ok", HttpStatus.OK, " domaine enregistré !");
@@ -67,7 +67,7 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
         }
     }
 
-    //lorsque l'admin ajoute le domaine
+    //lorsque l'user ajoute le domaine
     @PostMapping("/adduser/{iddomaine}/{idusers}")
     public String AjouterDomaine (@PathVariable Long iddomaine, @PathVariable Long idusers){
         Users usr= usersRepo.findById(idusers).get();
@@ -100,5 +100,10 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
         domaineRepo.deleteById(iddomaine);
         return "supp";
     }
+
+   @GetMapping("/read")
+   public List<Domaine> AfficherDomaine(){
+       return domaineSvc.Afficher();
+   }
 }
 

@@ -27,6 +27,7 @@ public class DomaineImpl implements DomaineSvc{
         return domaineRepo.findById(iddomaine).map(d->{
             d.setNomdomaine(domaine.getNomdomaine());
             d.setImagedomaine(domaine.getImagedomaine());
+            d.setDate(domaine.getDate());
             return domaineRepo.save(d);
         }).orElseThrow(()-> new RuntimeException("domaine trouver"));
     }

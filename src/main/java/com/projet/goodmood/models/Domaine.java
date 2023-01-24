@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ public class Domaine {
         private Long iddomaine;
         private String nomdomaine;
         private String imagedomaine;
+        private Date date ;
 
 
         @ManyToOne( optional = false)
