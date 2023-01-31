@@ -36,6 +36,10 @@ public class Users {
     private Set<Domaine> domaines=new HashSet<>();
 
 
+    @ManyToMany(mappedBy = "usersfav")
+    private Set<Citation> citation= new HashSet<>();
+
+
     public Users(String username, String email, String encode) {
         this.username = username;
         this.email = email;

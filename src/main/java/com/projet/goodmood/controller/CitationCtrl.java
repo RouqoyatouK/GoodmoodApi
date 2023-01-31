@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.projet.goodmood.img.SaveImage;
 import com.projet.goodmood.models.Citation;
 import com.projet.goodmood.models.Domaine;
+import com.projet.goodmood.models.Users;
 import com.projet.goodmood.repository.CitationRepo;
 import com.projet.goodmood.repository.DomaineRepo;
+import com.projet.goodmood.repository.UsersRepo;
 import com.projet.goodmood.security.ResponseMessage;
 import com.projet.goodmood.service.CitationSrv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.Set;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/citation")
 public class CitationCtrl {
     @Autowired
@@ -26,6 +32,8 @@ public class CitationCtrl {
 
     @Autowired
     DomaineRepo domaineRepo;
+    @Autowired
+    UsersRepo usersRepo;
 
 
     @PostMapping("/add/{iddomaine}")
@@ -58,6 +66,35 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
         }
     }
 
+//afficher les citation d'un domaine
 
+   @GetMapping("/read/{idusers}")
+    public List<Citation> Afficher (@PathVariable Long idusers){
+       // Citation citation= citationRepo.f
+        //Domaine dmn= domaineRepo.findByIddomaine(iddomaine);
+        Users users= usersRepo.findById(idusers).get();
+       return citationRepo.Affichertoulescitationdundomain(idusers);
+    }
+
+
+    //Ajouter favoris pour users
+    @PostMapping("/addfavoris/{idcitation}/{idusers}")
+    public String AjouterFavorisPourUsers(@PathVariable Long idcitation, @PathVariable Long idusers){
+        Citation citation= citationRepo.findById(idcitation).get();
+        Users users= usersRepo.findById(idusers).get();
+
+        citation.getUsersfav().add(users);
+        citationRepo.save(citation);
+        return "succes";
+
+    }
+
+    //Afficher les favoris dun user
+    @GetMapping("/readfav/{idusers}")
+    public  Object Affhicher(@PathVariable Long idusers){
+        Set<Citation> users=  usersRepo.findById(idusers).get().getCitation();
+        //return citationRepo.AffichertoulesFavoisdunUsers(idusers);
+        return  users;
+    }
 
 }

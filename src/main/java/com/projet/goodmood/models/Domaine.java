@@ -1,5 +1,6 @@
 package com.projet.goodmood.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,17 +28,18 @@ public class Domaine {
         private String imagedomaine;
         private Date date ;
 
-
-        @ManyToOne( optional = false)
+    @JsonIgnore
+    @ManyToOne( optional = false)
         @JoinColumn(name = "users", nullable = false)
         private Users users;
 
 
+    @JsonIgnore
         @ManyToMany()
         @JoinTable(  name = "domaine_user",
                 joinColumns = @JoinColumn(name = "domaine_id"),
                 inverseJoinColumns = @JoinColumn(name = "user_id"))
-        private Set<Users> userss =new HashSet<>();
+        private Set<Users> userss = new HashSet<>();
 
 
 
