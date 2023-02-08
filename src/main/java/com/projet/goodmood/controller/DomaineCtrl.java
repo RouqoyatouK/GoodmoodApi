@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 @RequestMapping("/domaine")
 public class DomaineCtrl {
     @Autowired

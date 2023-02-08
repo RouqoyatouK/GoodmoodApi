@@ -25,7 +25,7 @@ public interface CitationRepo extends JpaRepository<Citation, Long> {
    /* @Query(value= "select * from citation, domaine_user, users, domaine where users.id = domaine_user.user_id AND domaine.iddomaine = domaine_user.domaine_id AND domaine.iddomaine = citation.domaine AND users.id=: users.id", nativeQuery = true)
     public List<Citation> Affichertoulescitationdundomain(Long id);*/
 
-    @Query(value="select * from citation, domaine_user, users, domaine where users.id = domaine_user.user_id AND domaine.iddomaine = domaine_user.domaine_id AND domaine.iddomaine = citation.domaines AND users.id =:id", nativeQuery = true)
+    @Query(value="select * from citation, domaine_user, users, domaine where users.id = domaine_user.user_id AND domaine.iddomaine = domaine_user.domaine_id AND domaine.iddomaine = citation.domaines. AND users.id =:id", nativeQuery = true)
     public List<Citation> Affichertoulescitationdundomain(Long id);
 
 /*

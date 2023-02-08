@@ -11,9 +11,12 @@ import com.projet.goodmood.repository.RoleRepo;
 import com.projet.goodmood.repository.UsersRepo;
 import com.projet.goodmood.security.jwt.JwtUtils;
 import com.projet.goodmood.service.UsersDetailsImpl;
+import com.projet.goodmood.service.UsersRoleSvc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -30,7 +34,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 @RequestMapping("/api/auth")
 public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
@@ -43,6 +47,8 @@ public class AuthController {
 
     @Autowired
     RoleRepo roleRepo;
+    @Autowired
+    UsersRoleSvc usersRoleSvc;
 
     //encoder du password
     @Autowired
@@ -114,7 +120,8 @@ public class AuthController {
 
 
     @PostMapping("/signup")//@valid s'assure que les données soit validées
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest
+                                          ) {
 
         if (usersRepo.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
@@ -174,8 +181,18 @@ public class AuthController {
         //on ajoute le role au collaborateur
         System.out.println("test " + users.getEmail() + "test "  + users.getUsername() + "test "+ users.getPassword());
         users.setRoles(roles);
+        users.setImageusers("http://127.0.0.1/Goodmood/images/profil.png");
         usersRepo.save(users);
 
         return ResponseEntity.ok(new MessageResponse("user enregistré avec succès!"));
+    }
+
+    @GetMapping("/usersid/{id}")
+    public ResponseEntity<?> getUsersById(@PathVariable Long id){
+        Users users = usersRoleSvc.getUsersById(id);
+        if (users ==null){
+            return new ResponseEntity<>("Utilisateur introuvable", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(users,HttpStatus.OK);
     }
 }

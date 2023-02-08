@@ -11,6 +11,7 @@ import com.projet.goodmood.repository.DomaineRepo;
 import com.projet.goodmood.repository.UsersRepo;
 import com.projet.goodmood.security.ResponseMessage;
 import com.projet.goodmood.service.CitationSrv;
+import com.projet.goodmood.service.NotificationSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 @RequestMapping("/citation")
 public class CitationCtrl {
     @Autowired
@@ -34,6 +35,8 @@ public class CitationCtrl {
     DomaineRepo domaineRepo;
     @Autowired
     UsersRepo usersRepo;
+    @Autowired
+    NotificationSvc notificationSvc;
 
 
     @PostMapping("/add/{iddomaine}")
@@ -54,6 +57,7 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
                 ctt.setDomaine(dom);
                 citationSrv.Creer(ctt);
                 System.out.println("jjjjjjjjjjjjggg"+ ctt.getDomaine().getNomdomaine());
+                notificationSvc.generateNotificationByType(citationSrv.Creer(ctt),dom);
                 return ResponseMessage.generateResponse("ok", HttpStatus.OK, " citation enregistré !");
 
             }else {

@@ -20,7 +20,8 @@ public class Planning {
 
     @Column(length = 50,  unique =true)
     private String nomplanning;
-    private Date date;
+    private Date datedebut;
+    private Date datefin;
 
     @ManyToOne
     @JoinColumn(name = "users", nullable = false)

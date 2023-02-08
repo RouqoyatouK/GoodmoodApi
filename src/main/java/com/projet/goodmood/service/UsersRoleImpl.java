@@ -41,6 +41,11 @@ public class UsersRoleImpl implements UsersRoleSvc {
     }
 
     @Override
+    public Users getUsersById(Long id) {
+        return usersRepo.findById(id).get();
+    }
+
+    @Override
     public Role Ajouter(Role role) {
         return roleRepo.save(role);
     }

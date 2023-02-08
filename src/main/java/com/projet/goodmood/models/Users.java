@@ -1,5 +1,6 @@
 package com.projet.goodmood.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,8 @@ public class Users {
     private String email;
     private String password;
 
+    private String imageusers;
+
     @ManyToMany()
     @JoinTable(  name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -48,5 +51,10 @@ public class Users {
     }
 
 
-
+   // @JsonIgnore
+    @ManyToMany()
+    @JoinTable(  name = "notif_admin",
+            joinColumns = @JoinColumn(name = "users_notif"),
+            inverseJoinColumns = @JoinColumn(name = "notif_id"))
+    private Set<Notification> notifications = new HashSet<>();
 }

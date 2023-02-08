@@ -27,7 +27,8 @@ public class PlanningImpl implements PlanningSvc {
         return planningRepo.findById(idplanning).map(p->{
             p.setNomplanning(planning.getNomplanning());
             p.setUsers(planning.getUsers());
-            p.setDate(planning.getDate());
+            p.setDatedebut(planning.getDatedebut());
+            p.setDatefin(planning.getDatefin());
             return planningRepo.save(planning);
         }).orElseThrow(()->new RuntimeException("trouver!"));
     }

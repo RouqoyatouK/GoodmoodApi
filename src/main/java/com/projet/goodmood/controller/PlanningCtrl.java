@@ -2,17 +2,19 @@ package com.projet.goodmood.controller;
 
 import com.projet.goodmood.models.Planning;
 import com.projet.goodmood.models.Users;
+import com.projet.goodmood.payload.response.MessageResponse;
 import com.projet.goodmood.repository.PlanningRepo;
 import com.projet.goodmood.repository.UsersRepo;
 import com.projet.goodmood.service.PlanningSvc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8100", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 @RequestMapping("/planning")
 public class PlanningCtrl {
     @Autowired
@@ -23,11 +25,20 @@ public class PlanningCtrl {
     PlanningRepo planningRepo;
 
     @PostMapping("/add/{idusers}")
-    public Planning Ajouterrr(@RequestBody Planning planning, @PathVariable Long idusers){
+    public ResponseEntity<?> Ajouterrr(@RequestBody Planning planning, @PathVariable Long idusers){
         Users users = usersRepo.findById(idusers).get();
-        planning.setUsers(users);
-        planning.setDate(new Date());
-        return planningSvc.Ajouter(planning);
+        if(planning.getDatedebut().before(planning.getDatefin())  || planning.getDatedebut().equals(planning.getDatefin())) {
+
+            planning.setUsers(users);
+             this.planningSvc.Ajouter(planning);
+            return ResponseEntity.ok().body(new MessageResponse("planning ajouter avec succes"));
+
+        }
+        else {
+
+
+            return ResponseEntity.ok().body(new MessageResponse("la date de debut dois etre inferieur a la date de fin")) ;
+        }
     }
 
     @GetMapping("/read/{idusers}")
