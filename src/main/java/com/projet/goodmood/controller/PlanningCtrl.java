@@ -24,6 +24,8 @@ public class PlanningCtrl {
     @Autowired
     PlanningRepo planningRepo;
 
+
+
     @PostMapping("/add/{idusers}")
     public ResponseEntity<?> Ajouterrr(@RequestBody Planning planning, @PathVariable Long idusers){
         Users users = usersRepo.findById(idusers).get();
@@ -33,7 +35,15 @@ public class PlanningCtrl {
              this.planningSvc.Ajouter(planning);
             return ResponseEntity.ok().body(new MessageResponse("planning ajouter avec succes"));
 
+        } else if (planning.getNomplanning()!= null) {
+            return ResponseEntity.ok().body(new MessageResponse(" ce planning existe déjà"));
+
         }
+
+        /*else if (planning.getDatedebut().before(new Date()) || planning.getDatefin().before(new Date())){
+            return ResponseEntity.ok().body(new MessageResponse("La date doit etre superieur  a la date d'au"));
+
+        }*/
         else {
 
 
@@ -52,4 +62,13 @@ public class PlanningCtrl {
         Planning planning1= planningRepo.findById(idplanning).get();
         return planningSvc.Modifier(planning, idplanning);
     }
-}
+
+    @DeleteMapping("/delete/{idplanning}")
+    public  ResponseEntity<?> Supprimer(@PathVariable Long idplanning){
+        this.planningSvc.Supprimer(idplanning);
+        return ResponseEntity.ok().body(new MessageResponse("planning supprimer avec succes"));
+
+    }
+
+
+    }

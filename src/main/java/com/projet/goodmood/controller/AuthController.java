@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -124,9 +126,8 @@ public class AuthController {
                                           ) {
 
         if (usersRepo.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Erreur: Ce nom d'utilisateur existe déjà!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Ce nom d'utilisateur existe deja")) ;
+
         }
 
         if (usersRepo.existsByEmail(signUpRequest.getEmail())) {
@@ -194,5 +195,12 @@ public class AuthController {
             return new ResponseEntity<>("Utilisateur introuvable", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(users,HttpStatus.OK);
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<?> logoutAdmin() {
+        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new MessageResponse("Vous vous êtes deconnecter!"));
     }
 }
