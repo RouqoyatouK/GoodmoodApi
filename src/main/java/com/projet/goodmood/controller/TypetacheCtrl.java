@@ -1,12 +1,16 @@
 package com.projet.goodmood.controller;
 
 
+import com.projet.goodmood.models.Tache;
 import com.projet.goodmood.models.TypeTache;
 import com.projet.goodmood.models.Users;
+import com.projet.goodmood.payload.response.MessageResponse;
+import com.projet.goodmood.repository.TacheRepo;
 import com.projet.goodmood.repository.TypetacheRepo;
 import com.projet.goodmood.repository.UsersRepo;
 import com.projet.goodmood.service.TypetacheSvc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,14 +26,36 @@ public class TypetacheCtrl {
     @Autowired
     TypetacheRepo typetacheRepo;
 
+    @Autowired
+    TacheRepo tacheRepo;
+
 
 
 
     @PostMapping("/add/{idusers}")
-    public TypeTache Createe(@RequestBody TypeTache typeTache, @PathVariable Long idusers){
-        Users users= usersRepo.findById(idusers).get();
-        typeTache.setUsers(users);
-        return typetacheSvc.Creer(typeTache);
+    public ResponseEntity<?> Createe(@RequestBody TypeTache typeTache, @PathVariable Long idusers){
+        String Nomtypetache = typeTache.getNomtypetache();
+        TypeTache typeTache1= typetacheRepo.findByNomtypetache(Nomtypetache);
+
+
+        if (typeTache.getNomtypetache() != ""){
+            if (typeTache1 == null) {
+
+                Users users = usersRepo.findById(idusers).get();
+                typeTache.setUsers(users);
+                this.typetacheSvc.Creer(typeTache);
+                return ResponseEntity.ok().body(new MessageResponse(" Type tache creer avec succes"));
+
+            }else {
+                return ResponseEntity.ok().body(new MessageResponse(" Le type tache existe déjà"));
+
+            }
+
+        }
+        else {
+            return ResponseEntity.ok().body(new MessageResponse(" Le type tache ne doit pas être null"));
+
+        }
     }
 
     @GetMapping("/read/{idusers}")

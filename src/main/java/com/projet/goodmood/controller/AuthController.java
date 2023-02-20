@@ -188,6 +188,7 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("user enregistré avec succès!"));
     }
 
+    //Retourner un user par rapport a son id
     @GetMapping("/usersid/{id}")
     public ResponseEntity<?> getUsersById(@PathVariable Long id){
         Users users = usersRoleSvc.getUsersById(id);
@@ -196,6 +197,14 @@ public class AuthController {
         }
         return new ResponseEntity<>(users,HttpStatus.OK);
     }
+
+    //Afficher tout les users
+    @GetMapping("/readallusers")
+    public Object GetAllUsers(){
+        return usersRepo.AfficherToutLesUser();
+    }
+
+    //deconnection
 
     @PostMapping("/signout")
     public ResponseEntity<?> logoutAdmin() {

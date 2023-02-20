@@ -14,5 +14,7 @@ public interface PlanningRepo extends JpaRepository<Planning, Long> {
     @Query(value = "select * from planning where users=:users ", nativeQuery = true)
     public List<Planning>  AfficherPlanningDunUser(Long users);
 
+    Planning findByNomplanning(String nomplanning);
+
 
 }

@@ -20,8 +20,17 @@ public class TypeTache {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idtypttache;
+
     @Column(length = 50,  unique =true)
-    private String Nomtypetache;
+    private String nomtypetache;
+
+    public String getNomtypetache() {
+        return nomtypetache;
+    }
+
+    public void setNomtypetache(String nomtypetache) {
+        this.nomtypetache = nomtypetache;
+    }
 
     @ManyToOne( optional = false)
     @JoinColumn(name = "idusers", nullable = false)

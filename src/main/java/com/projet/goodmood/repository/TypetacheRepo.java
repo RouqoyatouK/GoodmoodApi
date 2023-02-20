@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface TypetacheRepo extends JpaRepository<TypeTache, Long> {
 
+    TypeTache findByNomtypetache( String Nomtypetache);
     TypeTache findByIdtypttache(Long idtypetache);
    // TypeTache findByNomtypetache();
 

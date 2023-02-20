@@ -14,5 +14,7 @@ public interface TacheRepo extends JpaRepository<Tache, Long> {
     @Query(value = "select * from tache where idplanning=:idplanning ", nativeQuery = true)
     public List<Tache> AfficherTacheDunUser(Long idplanning);
 
+    Tache findByDesignation( String designation);
+
 
 }

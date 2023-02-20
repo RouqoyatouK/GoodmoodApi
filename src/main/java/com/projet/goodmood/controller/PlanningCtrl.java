@@ -29,26 +29,40 @@ public class PlanningCtrl {
     @PostMapping("/add/{idusers}")
     public ResponseEntity<?> Ajouterrr(@RequestBody Planning planning, @PathVariable Long idusers){
         Users users = usersRepo.findById(idusers).get();
-        if(planning.getDatedebut().before(planning.getDatefin())  || planning.getDatedebut().equals(planning.getDatefin())) {
+        String nomplanning = planning.getNomplanning();
+        Planning planning1= planningRepo.findByNomplanning(nomplanning);
 
-            planning.setUsers(users);
-             this.planningSvc.Ajouter(planning);
-            return ResponseEntity.ok().body(new MessageResponse("planning ajouter avec succes"));
+        Date d = new Date();
+        if (planning.getNomplanning() != "" ) {
+         //   return ResponseEntity.ok().body(new MessageResponse(" ce planning existe déjà"));
+           if (planning1 == null){
+               if (planning.getDatedebut().before(planning.getDatefin())  || planning.getDatedebut().equals(planning.getDatefin())) {
+                   if (planning.getDatedebut().equals(d) || planning.getDatedebut().after(d) && planning.getDatefin().equals(d) || planning.getDatefin().after(d)) {
+                       planning.setUsers(users);
+                       this.planningSvc.Ajouter(planning);
+                       return ResponseEntity.ok().body(new MessageResponse("planning ajouter avec succes"));
+                   }
+                   else {
+                       return ResponseEntity.ok().body(new MessageResponse(" Les date doivent être superieur ou égale à la date d'aujourdhui"));
+                   }
 
-        } else if (planning.getNomplanning()!= null) {
-            return ResponseEntity.ok().body(new MessageResponse(" ce planning existe déjà"));
+               }  else {
+                   return ResponseEntity.ok().body(new MessageResponse(" La date de debut doit être inferieur à la date de fin"));
+               }
 
+           }else {
+               return ResponseEntity.ok().body(new MessageResponse("Ce nom planning existe dejà"));
+
+           }
         }
-
-        /*else if (planning.getDatedebut().before(new Date()) || planning.getDatefin().before(new Date())){
-            return ResponseEntity.ok().body(new MessageResponse("La date doit etre superieur  a la date d'au"));
-
-        }*/
         else {
-
-
-            return ResponseEntity.ok().body(new MessageResponse("la date de debut dois etre inferieur a la date de fin")) ;
+           // return ResponseEntity.ok().body(new MessageResponse(" ce planning debut infe à suppe"));
+            return ResponseEntity.ok().body(new MessageResponse("Le nom planning est vide "));
         }
+
+
+
+
     }
 
     @GetMapping("/read/{idusers}")

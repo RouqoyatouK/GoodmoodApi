@@ -51,8 +51,8 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
         Citation ctt= new JsonMapper().readValue(citations, Citation.class);
         Citation find = citationRepo.findByEcrivain(ctt.getEcrivain());
 
-        if (find == null) {
-            if (file != null) {
+
+
                 ctt.setImagecitation(SaveImage.save("domaines", file, ctt.getEcrivain()));
                 ctt.setDomaine(dom);
                 citationSrv.Creer(ctt);
@@ -60,14 +60,8 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
                 notificationSvc.generateNotificationByType(citationSrv.Creer(ctt),dom);
                 return ResponseMessage.generateResponse("ok", HttpStatus.OK, " citation enregistré !");
 
-            }else {
-                return ResponseMessage.generateResponse("error", HttpStatus.BAD_REQUEST, "Fichier vide");
 
-            }
-        }else {
-            return ResponseMessage.generateResponse("error", HttpStatus.BAD_GATEWAY, "Une citation existe déja avec le même nom !");
 
-        }
     }
 
 //afficher les citation d'un domaine
@@ -100,5 +94,17 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
         //return citationRepo.AffichertoulesFavoisdunUsers(idusers);
         return  users;
     }
+
+    //Supprimer favoris
+
+    @DeleteMapping("/deletefav/{idcitation}/{idusers}")
+    public String SupprimerFavorisDunUsers(@PathVariable Long idcitation, @PathVariable Long idusers){
+        Citation citation= citationRepo.findById(idcitation).get();
+        citation.getUsersfav().remove(usersRepo.findById(idusers).get());
+        citationRepo.save(citation);
+        return "Succes!";
+    }
+
+
 
 }

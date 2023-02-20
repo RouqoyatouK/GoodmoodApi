@@ -47,24 +47,29 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
         /*String role= "ROLE_ADMIN";
         if (usr.getRoles() = role ){
         }*/
-        if (find == null) {
-            if (file != null) {
-               dmn.setImagedomaine(SaveImage.save("domaines", file, dmn.getNomdomaine()));
-                   dmn.setUsers(usr);
 
-                   dmn.setDate(new Date());
-               domaineSvc.Creer(dmn);
-                System.out.println("hhhhhhhhhhhhhhh"+dmn.getImagedomaine());
-                return ResponseMessage.generateResponse("ok", HttpStatus.OK, " domaine enregistré !");
+          if (find == null) {
+              if (file != null) {
+                  dmn.setImagedomaine(SaveImage.save("domaines", file, dmn.getNomdomaine()));
+                  dmn.setUsers(usr);
 
-            }else {
-                return ResponseMessage.generateResponse("error", HttpStatus.BAD_REQUEST, "Fichier vide");
+                  dmn.setDate(new Date());
+                  domaineSvc.Creer(dmn);
+                  System.out.println("hhhhhhhhhhhhhhh"+dmn.getImagedomaine());
+                  return ResponseMessage.generateResponse("ok", HttpStatus.OK, " domaine enregistré !");
 
-            }
-        }else {
-            return ResponseMessage.generateResponse("error", HttpStatus.BAD_GATEWAY, "Une region existe déja avec le même nom !");
+              }else {
+                  return ResponseMessage.generateResponse("error", HttpStatus.BAD_REQUEST, "Fichier vide");
 
-        }
+              }
+          }else {
+              return ResponseMessage.generateResponse("error", HttpStatus.BAD_GATEWAY, "Un domaine existe déja avec le même nom !");
+
+          }
+
+
+
+
     }
 
     //lorsque l'user ajoute le domaine
@@ -93,12 +98,14 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
         return "SUCCESS";
     }
 
-    @DeleteMapping("/deleteuser/{iddomaine}")
-    public String Supprimerdomaine (@PathVariable Long iddomaine){
+    @DeleteMapping("/deleteuser/{iddomaine}/{user_id}")
+    public ResponseEntity<Void> Supprimerdomaine (@PathVariable("iddomaine") Long domaineId, @PathVariable("user_id") Long userId){
         //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Users usr= usersRepo.findById(idusers).get();
-        Domaine dmn = domaineRepo.findByIddomaine(iddomaine);
-        domaineRepo.deleteById(iddomaine);
-        return "supp";
+        //domaineRepo.supprimerDomainesUsers(domaineId, userId);
+        Domaine d=domaineRepo.findById(domaineId).get();
+        d.getUserss().remove(usersRepo.findById(userId).get());
+        domaineRepo.save(d);
+        return ResponseEntity.ok().build();
     }
 
    @GetMapping("/read")

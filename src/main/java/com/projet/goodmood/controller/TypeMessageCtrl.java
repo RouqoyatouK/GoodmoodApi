@@ -31,6 +31,7 @@ public class TypeMessageCtrl {
     @PostMapping("/add/{idadmin}")
     public ResponseEntity<?> Createe(@RequestBody Typemessage typemessage, @PathVariable Long idadmin) {
         Users users = usersRepo.findById(idadmin).get();
+        T
 
         if (typemessage.getNomtypemessage() == null) {
             typemessage.setAdmin(users);
