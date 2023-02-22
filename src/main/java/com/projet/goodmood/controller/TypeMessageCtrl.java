@@ -31,20 +31,25 @@ public class TypeMessageCtrl {
     @PostMapping("/add/{idadmin}")
     public ResponseEntity<?> Createe(@RequestBody Typemessage typemessage, @PathVariable Long idadmin) {
         Users users = usersRepo.findById(idadmin).get();
-        T
+        String nomtypemessage = typemessage.getNomtypemessage();
+        Typemessage typemessage1 = typemessageRepo.findByNomtypemessage(nomtypemessage);
 
-        if (typemessage.getNomtypemessage() == null) {
-            typemessage.setAdmin(users);
-            this.typemessageSvc.Creer(typemessage);
-            return ResponseEntity.ok().body(new MessageResponse("typemessage ajouter avec succes"));
+        if (typemessage.getNomtypemessage() != ""){
+            if (typemessage1==null){
+                typemessage.setAdmin(users);
+                this.typemessageSvc.Creer(typemessage);
+                return ResponseEntity.ok().body(new MessageResponse("typemessage ajouter avec succes"));
 
-        } else {
+            }else {
+                return ResponseEntity.ok().body(new MessageResponse("Ce type message existte déjà"));
 
+            }
 
-            return ResponseEntity.ok().body(new MessageResponse("Ce type de message existe deja"));
+        }else {
+            return ResponseEntity.ok().body(new MessageResponse("Le nom du type message est obligatoire"));
+
         }
     }
-
     @GetMapping("/read")
     public List<Typemessage> Lireeeee() {
        return  typemessageSvc.Afficher();
@@ -57,4 +62,11 @@ public class TypeMessageCtrl {
         Typemessage typemessage1= typemessageRepo.findById(idtypemessage).get();
         return typemessageSvc.Modifier(typemessage, idtypemessage);
     }
-}
+
+    @DeleteMapping("/delete/{idtypemessage}")
+    public  String Supprimer(@PathVariable Long idtypemessage){
+        typemessageSvc.Supprimer(idtypemessage);
+        return "succes";
+    }
+
+    }

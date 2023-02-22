@@ -15,6 +15,8 @@ public interface PlanningRepo extends JpaRepository<Planning, Long> {
     public List<Planning>  AfficherPlanningDunUser(Long users);
 
     Planning findByNomplanning(String nomplanning);
+    Planning findByNomplanningAndUsers(String nomplanning, Long users);
+
 
 
 }

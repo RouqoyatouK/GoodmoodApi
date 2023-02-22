@@ -30,7 +30,8 @@ public class PlanningCtrl {
     public ResponseEntity<?> Ajouterrr(@RequestBody Planning planning, @PathVariable Long idusers){
         Users users = usersRepo.findById(idusers).get();
         String nomplanning = planning.getNomplanning();
-        Planning planning1= planningRepo.findByNomplanning(nomplanning);
+        Long isuser = planning.getUsers().getId();
+        Planning planning1= planningRepo.findByNomplanningAndUsers(nomplanning, isuser);
 
         Date d = new Date();
         if (planning.getNomplanning() != "" ) {

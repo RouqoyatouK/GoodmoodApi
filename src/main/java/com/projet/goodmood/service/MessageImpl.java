@@ -25,7 +25,7 @@ public class MessageImpl implements MessageSvc {
     @Override
     public Message Modifier(Message message, Long idmessage) {
         return messageRepo.findById(idmessage).map(m->{
-            m.setMessage(message.getMessage());
+            m.setCotenumessage(message.getCotenumessage());
            return messageRepo.save(message);
         }).orElseThrow(()-> new RuntimeException("kkkkkkkkkkkkkkkkkkk"));
     }

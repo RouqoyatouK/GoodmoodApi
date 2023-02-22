@@ -17,7 +17,7 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idmessage;
-    private String message;
+    private String cotenumessage;
 
     @ManyToOne
     @JoinColumn(name = "usersmessage", nullable = false)

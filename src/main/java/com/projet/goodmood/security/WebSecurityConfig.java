@@ -128,6 +128,10 @@ public class WebSecurityConfig {
                 .antMatchers("/tache/**").permitAll()
                 .antMatchers("/planning/**").permitAll()
                 .antMatchers("/priority/**").permitAll()
+                .antMatchers("/typemessage/**").permitAll()
+                .antMatchers("/message/**").permitAll()
+
+
 
 
 
