@@ -77,13 +77,13 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
 
     //Ajouter favoris pour users
     @PostMapping("/addfavoris/{idcitation}/{idusers}")
-    public String AjouterFavorisPourUsers(@PathVariable Long idcitation, @PathVariable Long idusers){
+    public ResponseEntity<Object> AjouterFavorisPourUsers(@PathVariable Long idcitation, @PathVariable Long idusers){
         Citation citation= citationRepo.findById(idcitation).get();
         Users users= usersRepo.findById(idusers).get();
 
         citation.getUsersfav().add(users);
         citationRepo.save(citation);
-        return "succes";
+        return ResponseMessage.generateResponse("ok", HttpStatus.OK, " favoris enregistré !");
 
     }
 
@@ -98,11 +98,11 @@ le domaines ecrit ici doit etre identique a celui ecrit au niveau type dans la c
     //Supprimer favoris
 
     @DeleteMapping("/deletefav/{idcitation}/{idusers}")
-    public String SupprimerFavorisDunUsers(@PathVariable Long idcitation, @PathVariable Long idusers){
+    public ResponseEntity<?> SupprimerFavorisDunUsers(@PathVariable Long idcitation, @PathVariable Long idusers){
         Citation citation= citationRepo.findById(idcitation).get();
         citation.getUsersfav().remove(usersRepo.findById(idusers).get());
         citationRepo.save(citation);
-        return "Succes!";
+        return ResponseMessage.generateResponse("ok", HttpStatus.OK, " favoris supprimé !");
     }
 
 

@@ -18,7 +18,7 @@ public class Planning {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idplanning;
 
-    @Column(length = 50,  unique =true)
+    @Column(length = 50)
     private String nomplanning;
     private Date datedebut;
     private Date datefin;

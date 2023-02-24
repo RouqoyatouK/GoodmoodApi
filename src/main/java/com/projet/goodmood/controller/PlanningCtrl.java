@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
@@ -30,15 +31,27 @@ public class PlanningCtrl {
     public ResponseEntity<?> Ajouterrr(@RequestBody Planning planning, @PathVariable Long idusers){
         Users users = usersRepo.findById(idusers).get();
         String nomplanning = planning.getNomplanning();
-        Long isuser = planning.getUsers().getId();
-        Planning planning1= planningRepo.findByNomplanningAndUsers(nomplanning, isuser);
+        AtomicBoolean planifier = new AtomicBoolean(false);
+
+       // Long isuser = planning.getUsers().getId();
+        //Planning planning1 = planningRepo.findByNomplanning(nomplanning);
+        List<Planning> plannings = planningRepo.findByNomplanning(nomplanning);
+        plannings.forEach(planning1 -> {
+            if (planningRepo.existsByNomplanningAndUsers(planning1.getNomplanning(),users)) {
+                planifier.set(true);
+            } else {
+                planifier.set(false);
+            }
+        });
 
         Date d = new Date();
         if (planning.getNomplanning() != "" ) {
          //   return ResponseEntity.ok().body(new MessageResponse(" ce planning existe déjà"));
-           if (planning1 == null){
+           if (!planifier.get()){
                if (planning.getDatedebut().before(planning.getDatefin())  || planning.getDatedebut().equals(planning.getDatefin())) {
-                   if (planning.getDatedebut().equals(d) || planning.getDatedebut().after(d) && planning.getDatefin().equals(d) || planning.getDatefin().after(d)) {
+                   System.out.println(d);
+                   System.out.println("debut"+planning.getDatedebut());
+                   if (planning.getDatedebut().equals(d) || planning.getDatedebut().after(d)  && planning.getDatefin().equals(d) || planning.getDatefin().after(d)) {
                        planning.setUsers(users);
                        this.planningSvc.Ajouter(planning);
                        return ResponseEntity.ok().body(new MessageResponse("planning ajouter avec succes"));

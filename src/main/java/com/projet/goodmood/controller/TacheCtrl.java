@@ -45,17 +45,21 @@ public class TacheCtrl {
             //   return ResponseEntity.ok().body(new MessageResponse(" ce planning existe déjà"));
             if (tache1 == null){
                 if (tache.getDate().after(planning.getDatedebut()) && tache.getDate().before(planning.getDatefin())){
-                    System.out.println(planning.getDatedebut() + "Kalaban" +planning.getDatefin());
-                    tache.setTypetache(typeTache);
-                    tache.setPriority(priority);
-                    tache.setPlanning(planning);
+                    if (tache.getDate().equals(planning.getDatedebut()) || tache.getDate().equals(planning.getDatefin())) {
+                        System.out.println(planning.getDatedebut() + "Kalaban" + planning.getDatefin());
+                        tache.setTypetache(typeTache);
+                        tache.setPriority(priority);
+                        tache.setPlanning(planning);
 
-                    this.tacheSvc.Ajouter(tache);
-                    return ResponseEntity.ok().body(new MessageResponse("Tache creer avec succes"));
+                        this.tacheSvc.Ajouter(tache);
+                        return ResponseEntity.ok().body(new MessageResponse("Tache creer avec succes"));
+                    }else {
+                        return ResponseEntity.ok().body(new MessageResponse("la datetache doit etre equal entre date debut et fin du planning "));
 
+                    }
 
                 }else {
-                    return ResponseEntity.ok().body(new MessageResponse("la datetache doit etre entre date debut et fin du planning "));
+                    return ResponseEntity.ok().body(new MessageResponse("la datetache doit etre equal entre date debut et fin du planning "));
 
                 }
 

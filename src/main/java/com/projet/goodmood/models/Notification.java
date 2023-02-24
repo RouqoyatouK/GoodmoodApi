@@ -27,4 +27,6 @@ public class Notification {
     @ManyToMany(mappedBy = "notifications")
     private Set<Users> users = new HashSet<>();
 
+
+
 }
